@@ -1,6 +1,7 @@
 var _ = require("lodash");
 var assert = require("assert");
 var MongoClient = require("mongodb").MongoClient;
+var ObjectID = require('mongodb').ObjectID;
 
 var url;
 var jobCollectionName;
@@ -30,12 +31,24 @@ module.exports = function(ctx, cb) {
     //Filter out specific titles
     results = _.filter(results, titleFilterOutPredicate);
 
-     for (var index = 0; index < results.length; index++) {
-        job = results[index];
-
-        //Attempt to see if the job is in the db already, if not add it to the db.
-        jobCollection.find({"link": job.link}, saveData);
-     }
+    //Iterate over filtered results.
+    results.forEach(function (localJob) {
+      
+      //Attempt to see if the job is in the db already, if not add it to the db.
+      jobCollection.find({"link": localJob.link}, function (err, docs) {
+        docs.count(function(err, count) {
+          
+          //If we have no items that match, then add.
+          if(count === 0) {
+            MongoClient.connect(url, function(err, db1) {
+              db1.collection(jobCollectionName).insertOne(localJob, insertError);
+              db1.collection(newJobCollectionName).insertOne(localJob, insertError);
+              db1.close();
+            });
+          }
+        });
+      });
+     });
 
     db.close();
     cb(null, { status:"Success" });
@@ -64,22 +77,6 @@ function companyFilterOutPredicate(item) {
 var titleFilterOut;
 function titleFilterOutPredicate(item) {
   return filterOutItem(item.jobTitle, titleFilterOut);
-}
-
-//Save Data Callback
-var job;
-function saveData(err, docs) {
-  docs.count(function(err, count) {
-    //If we have no items that match, then add.
-    if(count === 0) {
-      console.log;
-      MongoClient.connect(url, function(err, db) {
-        db.collection(jobCollectionName).insert(job, insertError);
-        db.collection(newJobCollectionName).insert(job, insertError);
-        db.close();
-      });
-    }
-  });
 }
 
 function insertError(err, result) {
