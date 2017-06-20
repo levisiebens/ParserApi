@@ -37,9 +37,10 @@ module.exports = function(ctx, cb) {
       //Attempt to see if the job is in the db already, if not add it to the db.
       jobCollection.find({"jobid": localJob.jobId}, function (err, docs) {
         docs.count(function(err, count) {
-          
+          console.log(localJob.jobId);
           //If we have no items that match, then add.
           if(count === 0) {
+            console.log("Inserting...");
             MongoClient.connect(url, function(err, db1) {
               db1.collection(jobCollectionName).insertOne(localJob, insertError);
               db1.collection(newJobCollectionName).insertOne(localJob, insertError);
