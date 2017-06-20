@@ -35,7 +35,7 @@ module.exports = function(ctx, cb) {
     results.forEach(function (localJob) {
       
       //Attempt to see if the job is in the db already, if not add it to the db.
-      jobCollection.find({"link": localJob.link}, function (err, docs) {
+      jobCollection.find({"jobId": localJob.jobId}, function (err, docs) {
         docs.count(function(err, count) {
           
           //If we have no items that match, then add.
