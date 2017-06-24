@@ -49,7 +49,6 @@ module.exports = function(ctx, cb) {
             MongoClient.connect(url, function(err, db1) {
               db1.collection(jobCollectionName).insertOne(localJob, insertError);
               db1.collection(newJobCollectionName).insertOne(localJob, insertError);
-              db1.close();
             });
           }
         });
