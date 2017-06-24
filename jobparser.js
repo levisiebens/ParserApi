@@ -43,6 +43,7 @@ module.exports = function(ctx, cb) {
           //If we have no items that match, then add.
           //TODO! on 6/24 the count request no longer funcitons and always returns undefined (even after no code changes)
           //So far, attempted to fix it by chaning the way the query is made and other items, however there seems to be no reason why this changed suddenly.
+          console.log(count);
           if(count === 0 || count === undefined) {
             console.log("Inserting...");
             MongoClient.connect(url, function(err, db1) {
