@@ -38,9 +38,9 @@ module.exports = function(ctx, cb) {
       jobCollection.find({"jobid": localJob.jobid}, function (err, docs) {
         console.log("Docs value...")
         //console.log(docs);
-        docs.count(function(err, count) {
+        docs.count(function(err, countRet) {
           console.log(localJob.jobid);
-          console.log(count)
+          console.log(countRet)
           //If we have no items that match, then add.
           if(count === 0) {
             console.log("Inserting...");
