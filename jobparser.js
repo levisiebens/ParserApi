@@ -38,6 +38,7 @@ module.exports = function(ctx, cb) {
       jobCollection.find({"jobid": localJob.jobid}, function (err, docs) {
         docs.count(function(err, count) {
           console.log(localJob.jobid);
+          console.log(count)
           //If we have no items that match, then add.
           if(count === 0) {
             console.log("Inserting...");
@@ -49,7 +50,7 @@ module.exports = function(ctx, cb) {
           }
           else {
             console.log(localJob.jobTitle)
-            console.log(count)
+            
           }
         });
       });
