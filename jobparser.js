@@ -34,12 +34,16 @@ module.exports = function(ctx, cb) {
     //Iterate over filtered results.
     results.forEach(function (localJob) {
       
+      var object = 
+      
       //Attempt to see if the job is in the db already, if not add it to the db.
       jobCollection.find({"jobid": localJob.jobid}, function (err, docs) {
         docs.count(function(err, count) {
           console.log(localJob.jobid);
           //If we have no items that match, then add.
-          if(count === 0) {
+          //TODO! on 6/24 the count request no longer funcitons and always returns undefined (even after no code changes)
+          //So far, attempted to fix it by chaning the way the query is made and other items, however there seems to be no reason why this changed suddenly.
+          if(count === 0 || count === undefined) {
             console.log("Inserting...");
             MongoClient.connect(url, function(err, db1) {
               db1.collection(jobCollectionName).insertOne(localJob, insertError);
