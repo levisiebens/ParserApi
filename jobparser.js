@@ -49,6 +49,7 @@ module.exports = function(ctx, cb) {
           }
           else {
             console.log(localJob.jobTitle)
+            console.log(docs.count)
           }
         });
       });
