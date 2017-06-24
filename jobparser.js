@@ -35,6 +35,8 @@ module.exports = function(ctx, cb) {
     results.forEach(function (localJob) {
       
       //Attempt to see if the job is in the db already, if not add it to the db.
+      var object = {"jobid": '"' + localJob.jobid.toString() + '"' };
+      console.log(object);
       jobCollection.find({"jobid": '"' + localJob.jobid.toString() + '"' }, function (err, docs) {
         docs.count(function(err, count) {
           console.log(localJob.jobid);
