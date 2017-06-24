@@ -35,12 +35,9 @@ module.exports = function(ctx, cb) {
     results.forEach(function (localJob) {
       
       //Attempt to see if the job is in the db already, if not add it to the db.
-      var object = {"jobid": localJob.jobid.toString() };
-      console.log(object);
-      jobCollection.find(object, function (err, docs) {
+      jobCollection.find({"jobid": localJob.jobid}, function (err, docs) {
         docs.count(function(err, count) {
           console.log(localJob.jobid);
-          console.log(count)
           //If we have no items that match, then add.
           if(count === 0) {
             console.log("Inserting...");
@@ -49,10 +46,6 @@ module.exports = function(ctx, cb) {
               db1.collection(newJobCollectionName).insertOne(localJob, insertError);
               db1.close();
             });
-          }
-          else {
-            console.log(localJob.jobTitle)
-            
           }
         });
       });
