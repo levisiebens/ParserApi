@@ -47,6 +47,9 @@ module.exports = function(ctx, cb) {
               db1.close();
             });
           }
+          else {
+            console.log(localJob.jobTitle)
+          }
         });
       });
      });
