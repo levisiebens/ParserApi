@@ -41,20 +41,26 @@ module.exports = function(ctx, cb) {
         docs.count(function(err, count) {
           console.log(localJob.jobid);
           //If we have no items that match, then add.
-          //TODO! on 6/24 the count request no longer funcitons and always returns undefined (even after no code changes)
-          //So far, attempted to fix it by chaning the way the query is made and other items, however there seems to be no reason why this changed suddenly.
-          console.log(count);
+          
           if(count === 0 || count === undefined) {
             console.log("Inserting...");
             MongoClient.connect(url, function(err, db1) {
               db1.collection(jobCollectionName).insertOne(localJob, insertError);
               db1.collection(newJobCollectionName).insertOne(localJob, insertError);
+              //TODO:Count was getting error for insert because of db1 close.
+              //db1.close();
             });
+          }
+          
+          //Logging for async issue
+          if(count === undefined) {
+            console.log("Error! Count was undefined")
           }
         });
       });
      });
 
+    //TODO:Count was getting undefined due to connection close. Need to figure out how to do this correctly for async calls.
     //db.close();
     cb(null, { status:"Success" });
   });
